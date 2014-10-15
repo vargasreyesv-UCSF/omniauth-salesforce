@@ -28,6 +28,22 @@ module OmniAuth
           mobile_request = ua.downcase =~ Regexp.new(MOBILE_USER_AGENTS)
           options[:display] = mobile_request ? 'touch' : 'page'
         end
+        
+        #Look for custom url params in request
+        if options.key?(:customurl)
+        
+          if !options[:customurl].blank?
+            #Override strategy defaults
+            CustomUrl.default_options[:client_options][:site] = options[:customurl]
+            #Set site url
+            options[:client_options][:site] = options[:customurl]
+          end
+          
+          #clean additional parameters from hash
+          options.delete(:customurl)
+
+        end
+        
         super
       end
 
